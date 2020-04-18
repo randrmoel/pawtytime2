@@ -1,0 +1,52 @@
+use `sx2buafum1wner6e`;
+
+CREATE TABLE `appts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `walkDate` date NOT NULL,
+  `timeSlot` time NOT NULL,
+  `dogUser` int DEFAULT '0',
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL,
+  `DogId` int DEFAULT NULL,
+  `DogActorId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `DogId` (`DogId`),
+  KEY `DogActorId` (`DogActorId`),
+  CONSTRAINT `appts_ibfk_1` FOREIGN KEY (`DogId`) REFERENCES `dogs` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `appts_ibfk_2` FOREIGN KEY (`DogActorId`) REFERENCES `dogactors` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE `dogactors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `actorType` tinyint(1) NOT NULL,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
+  `address1` varchar(255) NOT NULL,
+  `address2` varchar(255) DEFAULT NULL,
+  `city` varchar(255) NOT NULL,
+  `st` enum('AK','AL','AR','AS','AZ','CA','CO','CT','DC','DE','FL','GA','GU','HI','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MI','MN','MO','MP','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','PR','RI','SC','SD','TN','TX','UM','UT','VA','VI','VT','WA','WI','WV','WY') NOT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `phoneType` enum('landline','mobile') NOT NULL,
+  `zip5` varchar(255) NOT NULL,
+  `lat` decimal(10,3) DEFAULT NULL,
+  `lng` decimal(10,3) DEFAULT NULL,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+);
+
+CREATE TABLE `dogs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `dogName` varchar(255) NOT NULL,
+  `breed` varchar(255) NOT NULL,
+  `breedUrl` varchar(255) DEFAULT NULL,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL,
+  `DogActorId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `DogActorId` (`DogActorId`),
+  CONSTRAINT `dogs_ibfk_1` FOREIGN KEY (`DogActorId`) REFERENCES `dogactors` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+);

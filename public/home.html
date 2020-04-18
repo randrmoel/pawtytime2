@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vaibhav111tandon/vov.css@latest/vov.css">
+    <link href="https://fonts.googleapis.com/css2?family=Acme&family=Fjalla+One&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+<body>
+  <!-- Pre-loader -->
+  <div class="vov fade-out t-2">
+  <svg id="svg-sprite" >
+    <symbol id="paw" viewBox="0 0 249 209.32">
+      <ellipse cx="27.917" cy="106.333" stroke-width="0" rx="27.917" ry="35.833"/>
+      <ellipse cx="84.75" cy="47.749" stroke-width="0" rx="34.75" ry="47.751"/>
+      <ellipse cx="162" cy="47.749" stroke-width="0" rx="34.75" ry="47.751"/>
+      <ellipse cx="221.083" cy="106.333" stroke-width="0" rx="27.917" ry="35.833"/>
+      <path stroke-width="0" d="M43.98 165.39s9.76-63.072 76.838-64.574c0 0 71.082-6.758 83.096 70.33 0 0 2.586 19.855-12.54 31.855 0 0-15.75 17.75-43.75-6.25 0 0-7.124-8.374-24.624-7.874 0 0-12.75-.125-21.5 6.625 0 0-16.375 18.376-37.75 12.75 0 0-28.29-7.72-19.77-42.86z"/>
+    </symbol>
+  </svg>
+  <div class="ajax-loader">
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+    <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
+  </div>
+</div>
+<!-- logo -->
+<div class="container vov fade-in t-3">
+  <div class="row">
+    <div class="col s12" id="logo">
+      <h1 class="center"><i id="pawPrint" class="fas fa-paw small amber-text"></i> Pawty time!</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col m6"><a href="#modal1" class="waves-effect waves-light btn-large right amber modal-trigger" id="login"><i class="fas fa-paw"></i><span> Login</span></a></div>
+    <!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a> -->
+    <div class="col m6"><a href="#modal2" class="waves-effect waves-light btn-large left amber modal-trigger" id="signUp"><i class="fas fa-paw"></i><span> Sign Up</span></a></div>
+  </div>
+  <!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a> -->
+</div>
+
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <h4>Success!</h4>
+    <p>You have successfully signed up. Please login with your email and password.</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#modal1" class="modal-close modal-trigger waves-effect waves-green btn amber"><i class="fas fa-paw"></i> Login</a>
+  </div>
+</div>
+
+<!-- login modal -->
+<div id="modal1" class="modal bottom-sheet">
+  <div class="container">
+  <div class="modal-content">
+    <h2><i class="fas fa-paw amber-text"></i> Login</h2>
+    <form class="login">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="email-input" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="password-input" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-default amber" id="loginBtn"><i class="fas fa-paw"></i> Login!</button>
+    </form>
+   
+  </div>
+  <div class="modal-footer">
+  
+  </div>
+</div>
+</div>
+
+<!-- sign up modal -->
+<div id="modal2" class="modal bottom-sheet">
+  <div class="container">
+  <div class="modal-content">
+    <h2><i class="fas fa-paw amber-text"></i> Sign Up</h2>
+    <form class="signUp col s12">
+      <div class="row" id="userType">
+          <p>
+            <label>
+              <input name="actorType" type="radio" id="owner" checked value="true"/>
+              <span>Dog Owner</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input name="actorType" id="walker" type="radio" value="false"/>
+              <span>Dog Walker</span>
+            </label>
+          </p>
+      </div>
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input placeholder="Alfred" id="first_name" type="text" class="validate">
+          <label for="first_name">First Name</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <input placeholder="Pennyworth" id="last_name" type="text" class="validate">
+          <label for="last_name">Last Name</label>
+        </div>
+      </div>
+      <div class="row">
+          <div class="input-field col s12 m6">
+            <input id="email" type="email" class="validate">
+            <label for="email">Email</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input id="password" type="password" class="validate">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="1600 Pennsylvania Ave" id="address1" type="text" class="validate">
+            <label for="address1">Address 1</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Apt, Unit, Suite, etc." id="address2" type="text" class="validate">
+            <label for="address2">Address 2 - Optional</label>
+            <!-- <span class="helper-text" data-error="wrong" data-success="right">Optional</span> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 m3">
+            <input placeholder="Washington, DC" id="city" type="text" class="validate">
+            <label for="city">City</label>
+          </div>
+          <div class="input-field col s12 m3">
+            <select id="state">
+              <option value="" disabled selected>Select State</option>
+              <option value="AL">AL</option>
+              <option value="AR">AR</option>
+              <option value="AS">AS</option>
+              <option value="AZ">AZ</option>
+              <option value="CA">CA</option>
+              <option value="CO">CO</option>
+              <option value="CT">CT</option>
+              <option value="DC">DC</option>
+              <option value="DE">DE</option>
+              <option value="FL">FL</option>
+              <option value="GA">GA</option>
+              <option value="GU">GU</option>
+              <option value="HI">HI</option>
+              <option value="IA">IA</option>
+              <option value="IL">IL</option>
+              <option value="IN">IN</option>
+              <option value="KS">KS</option>
+              <option value="KY">LA</option>
+              <option value="MA">MA</option>
+              <option value="MD">MD</option>
+              <option value="ME">ME</option>
+              <option value="MI">MI</option>
+              <option value="MN">MN</option>
+              <option value="MO">MO</option>
+              <option value="MS">MS</option>
+              <option value="MT">MT</option>
+              <option value="NC">NC</option>
+              <option value="ND">ND</option>
+              <option value="NE">NE</option>
+              <option value="NH">NH</option>
+              <option value="NJ">NJ</option>
+              <option value="NM">NM</option>
+              <option value="NV">NV</option>
+              <option value="NY">NY</option>
+              <option value="OH">OH</option>
+              <option value="OK">OK</option>
+              <option value="OR">OR</option>
+              <option value="PA">PA</option>
+              <option value="PR">PR</option>
+              <option value="RI">RI</option>
+              <option value="SC">SC</option>
+              <option value="SD">SD</option>
+              <option value="TN">TN</option>
+              <option value="TX">TX</option>
+              <option value="UT">UT</option>
+              <option value="VA">VA</option>
+              <option value="VI">VI</option>
+              <option value="VT">VT</option>
+              <option value="WA">WA</option>
+              <option value="WI">WI</option>
+              <option value="WV">WV</option>
+              <option value="WY">WY</option>
+            </select>
+            <label for="city">State</label>
+          </div>
+          <div class="input-field col s12 m3">
+            <input placeholder="20500" id="zipCode" type="text" class="validate">
+            <label for="zipCode">Zip Code</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input placeholder="(555) 555-5555" id="phoneNumber" type="text" class="validate">
+            <label for="phoneNumber">Phone</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <div id="phoneType">
+              <p>
+                <label>
+                  <input name="phoneType" type="radio"  checked value="mobile"/>
+                  <span>Mobile</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="phoneType"  type="radio" value="landline"/>
+                  <span>Home</span>
+                </label>
+              </p>
+            </div>
+          </div>
+        </div>
+        <button type="submit" href="#modal3" class="btn btn-default amber modal-trigger modal-close right" id="signUpBtn"><i class="fas fa-paw"></i> Join the Pack!</button>
+      </form>
+  </div>
+  <div class="modal-footer">
+ 
+  </div>
+</div>
+</div>
+
+<script src="https://kit.fontawesome.com/14111279f9.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
