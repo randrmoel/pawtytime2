@@ -4,7 +4,7 @@ $(document).ready(function() {
 
   $(".modal").modal();
   $(".tooltipped").tooltip();
-
+  //books an appointment
   const putAppt = (apptId, dog, wM) => {
     $.ajax({
       url: "/api/change-walk/"+ apptId,
@@ -23,14 +23,14 @@ $(document).ready(function() {
 
   $.get("/api/user_data").then(function(user){ 
   // Function to update appointment
-  // list in modal
+  // list in modal prior to booking appointment
   const updateAppt = (response) =>{
     let idnt = 0;
     let tm = "00:00:00";
     let dt = "2020-01-01"
     let wM = "";
     let html1 = "";
-    $('#apptList').html("");
+    $('#apptList').empty();
 
   for (i = 0; i < response.length; i++) {
     idnt = response[i].id;
@@ -60,9 +60,9 @@ $(document).ready(function() {
           <div class="col s12 input-display">
             <div class="input-container">
               <input id="${idnt}wm" type="text" placeholder="${wM}" class="walkMemo">
-              <i class="material-icons">
+              <!--<i class="material-icons">
                 create
-              </i>
+              </i>-->
             </div>
           </div> <!--end column 5-->
         </div> <!--End of Row -->
@@ -94,6 +94,8 @@ $.ajax({
         method: "GET"
       }).then(function(resp2){
         updateAppt(resp2);
+        $('#scheduleModal').modal('close');
+        refreshAppt();
       });
     };
   });
@@ -107,23 +109,24 @@ $.ajax({
 
   //function to get any active upcoming appointments
   
-  $.get("/api/mydog/" + user.id).then(function(data) {
-    
-    if (data.length > 0) {
-      $("#defaultMessage").hide();
-      for (i = 0; i < data.length; i++) {
-        
-        $("#appointments").append(
-          "<li class='collection-item'>" + "Dog Name: " + data[i].Dog.dogName + "<br>Walk Date: " + data[i].walkDate + "<br>Time Slot: " + data[i].timeSlot + "</li>"
-        );
+  const refreshAppt = () =>{
+    $.get("/api/mydog/" + user.id).then(function(data) {
+      if (data.length > 0) {
+        $("#defaultMessage").hide();
+        $("#appointments").empty();
+        for (i = 0; i < data.length; i++) {
+          
+          $("#appointments").append(
+            "<li class='collection-item'>" + "Dog Name: " + data[i].Dog.dogName + "<br>Walk Date: " + data[i].walkDate + "<br>Time Slot: " + data[i].timeSlot + "</li>"
+          );
+        }
+      }else {
+        $("#defaultMessage").show();
       }
-    }else {
-      $("#defaultMessage").show();
-    }
-    
-      // $("#defaultMessage").show();
-    
-  });
+    });
+  };
+
+  refreshAppt();
 
 
   //retrieving current dog data and creating an li

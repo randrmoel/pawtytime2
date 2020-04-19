@@ -222,7 +222,8 @@ module.exports = function(app) {
         include:[{
           model:db.Dog,
           attributes: ["dogName", "DogActorId"],
-          where:{dogActorId:req.params.id}
+          where:{
+            dogActorId:req.params.id}
         }]
       }).then(function(myAppt){
         res.json(myAppt)
@@ -254,7 +255,7 @@ module.exports = function(app) {
     // if cncl true, cancel the appointment by setting dogUser = 0
        db.Appt.update({
         dogUser: 0,
-        DogId: 0
+        DogId: null
       },
       {
         where:{

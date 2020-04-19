@@ -23,7 +23,12 @@ module.exports = function(sequelize, DataTypes) {
     });
 
     Appt.associate = function(models){
-        Appt.belongsTo(models.Dog); //DogId
+        Appt.belongsTo(models.Dog, {
+            foreignKey: {
+                name: "DogId",
+                allowNull: true
+            }
+        }); //DogId
         Appt.belongsTo(models.DogActor); //DogActorId
     };
     return Appt;
