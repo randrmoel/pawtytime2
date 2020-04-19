@@ -5,54 +5,102 @@ $(document).ready(function() {
   $(".modal").modal();
   $(".tooltipped").tooltip();
 
+  const putAppt = (apptId, dog, wM) => {
+    $.ajax({
+      url: "/api/change-walk/"+ apptId,
+      method: "PUT",
+      data: {
+        dogUser: dog,
+        DogId: dog,
+        walkMemo: wM
+      }
+  }).then(function(data){
+    console.log(data);
+    });
+  };
 
-  $.get("/api/user_data").then(function(user) { 
-    
-//add schedule to scheduler
+  var apptLine;
+
+  $.get("/api/user_data").then(function(user){ 
+  // Function to update appointment
+  // list in modal
+  const updateAppt = (response) =>{
+    let idnt = 0;
+    let tm = "00:00:00";
+    let dt = "2020-01-01"
+    let wM = "";
+    let html1 = "";
+    $('#apptList').html("");
+
+  for (i = 0; i < response.length; i++) {
+    idnt = response[i].id;
+    tm = response[i].timeSlot;
+    dt = response[i].walkDate;
+    wM = response[i].walkMemo;
+    dg = 0;
+    apptLine = 
+    `<li>
+      <div class="row">
+        <a class="waves-effect waves-light btn-large apptBtn">
+          <div id=${idnt}tb  data-appt = ${idnt} class="col s2 inNum">
+            ${idnt}
+          </div> <!--end column 1-->
+        </a>
+          <div class="col s2 hour">
+            ${tm}
+          </div> <!--end column 2-->
+          <div class="col s2 date">
+            ${dt}
+          </div> <!-- end column 3 -->
+          <div class = "col m2 s2 dog">
+            <div class="input-container">
+              Dog: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">
+            </div>
+          </div> <!--end of column 4-->
+          <div class="col s12 input-display">
+            <div class="input-container">
+              <input id="${idnt}wm" type="text" placeholder="${wM}" class="walkMemo">
+              <i class="material-icons">
+                create
+              </i>
+            </div>
+          </div> <!--end column 5-->
+        </div> <!--End of Row -->
+      </li>`
+    html1 = html1 + apptLine;
+  } 
+  $('#apptList').html(html1);
+}
 
 $.ajax({
   url: "/api/appt",
   method: "GET"
-}).then(function(response){
-   let idnt = 0;
-   let tm = "00:00:00";
-   let dt = "2020-01-01"
-   let wM = "";
-   let html1 = "";
-  $('#apptList').html(html1);
-  const apptLine = `<li><div id=${idnt}tb class="row">
-  <div class="col s2">${idnt}</div>
-  <div class="col s2 hour">${tm}</div>
-  <div class="col 1s date">${dt}</div>
-  <label>
-    <input type="checkbox" value="${idnt}" />
-    <span>Schedule</span>
-  </label>
-  <div class="col s12 input-display">
-    <div class="input-container">
-      <input type="text" placeholder="${wM}" class="walkMemo">
-      <i class="material-icons">create</i>
-    </div>
-  </div>
-</div></li>`
-
-for (i = 0; i < response.length; i++) {
-  idnt = response[i].id;
-  tm = response[i].timeSlot;
-  dt = response[i].walkDate;
-  wM = response[i].walkMemo;
-  html1 += apptLine;
-} 
-$('#apptList').html(html1);
-
-$("#apptList").on("click", function(event){
-  var walk = $(this).children(`${idnt}tb`).attr(`${idnt}tb`);
-  console.log(walk)
+}).then(function(resp1){
+  updateAppt(resp1);
+  var whchAppt = document.getElementById("apptList");
+  whchAppt.addEventListener("click", event =>{
+    t1 = event.target.classList.value.includes("apptBtn");
+    t2 = event.target.classList.value.includes("inNum");
+    if(t1 || t2){
+      ans = event.target.id.slice(0,-2);
+      dogTg = "#"+ ans + "dg"
+      wmTg = "#" + ans + "wm"
+      console.log(ans);
+      console.log($(dogTg).val());
+      console.log($(wmTg).val());
+      putAppt(ans, $(dogTg).val(), $(wmTg).val());
+      $.ajax({
+        url: "/api/appt",
+        method: "GET"
+      }).then(function(resp2){
+        updateAppt(resp2);
+      });
+    };
+  });
 })
-})
+
 
   //function to get first namer of dog owner
-
   $.get("/api/actor/" + user.id).then(function(data) {
     $("#UserName").text(data.firstName);
   });
