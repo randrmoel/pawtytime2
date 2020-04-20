@@ -5,25 +5,27 @@ $(document).ready(function() {
   $(".modal").modal();
   $(".tooltipped").tooltip();
   //books an appointment
-  const putAppt = (apptId, dog, wM) => {
-    $.ajax({
-      url: "/api/change-walk/"+ apptId,
-      method: "PUT",
-      data: {
-        dogUser: dog,
-        DogId: dog,
-        walkMemo: wM
-      }
-  }).then(function(data){
-    console.log(data);
-    });
-  };
-
-  var apptLine;
 
   // First get the current user and wrap this around
   // all other functions
-  $.get("/api/user_data").then(function(user){ 
+  $.get("/api/user_data").then(function(user){
+    const putAppt = (apptId, dog, wM) => {
+      console.log("apptId:"+ apptId, "Dog Id" + dog, "Memo: "+ wM);
+      $.ajax({
+        url: "/api/change-walk/"+ apptId,
+        method: "PUT",
+        data: {
+          dogUser: dog,
+          DogId: dog,
+          walkMemo: wM
+        }
+    }).then(function(data){
+      console.log(data);
+      });
+    };
+  
+    var apptLine;
+   
   // Function to update appointment
   // list in modal prior to booking appointment
     const updateAppt = (response) =>{
@@ -43,11 +45,12 @@ $(document).ready(function() {
       apptLine = 
       `<li>
         <div class="row">
-          <a class="waves-effect waves-light btn-large apptBtn">
-            <div id=${idnt}tb  data-appt = ${idnt} class="col s2 inNum">
-              ${idnt}
+
+            <div data-appt = ${idnt} class="col s2">
+              <a class="waves-effect waves-light btn-large apptBtn" id=${idnt}tb>
+                ${idnt}
+              </a>
             </div> <!--end column 1-->
-          </a>
             <div class="col s2 hour">
               ${tm}
             </div> <!--end column 2-->
@@ -56,7 +59,7 @@ $(document).ready(function() {
             </div> <!-- end column 3 -->
             <div class = "col m2 s2 dog">
               <div class="input-container">
-                Dog: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">
+                Dog ID: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">
               </div>
             </div> <!--end of column 4-->
             <div class="col s12 input-display">
@@ -82,8 +85,8 @@ $(document).ready(function() {
     var whchAppt = document.getElementById("apptList");
     whchAppt.addEventListener("click", event =>{
       let t1 = event.target.classList.value.includes("apptBtn");
-      let t2 = event.target.classList.value.includes("inNum");
-      if(t1 || t2){
+      //let t2 = event.target.classList.value.includes("inNum");
+      if(t1 /*|| t2*/){
         ans = event.target.id.slice(0,-2);
         dogTg = "#"+ ans + "dg"
         wmTg = "#" + ans + "wm"
@@ -96,7 +99,7 @@ $(document).ready(function() {
           method: "GET"
         }).then(function(resp2){
           updateAppt(resp2);
-          $('#scheduleModal').modal('close');
+          $("#scheduleModal").modal("close");
           refreshAppt();
         });
       };
@@ -112,7 +115,21 @@ $(document).ready(function() {
   //function to get any active upcoming appointments
   
   const refreshAppt = () =>{
+    $("#defaultMessage").show();
     $.get("/api/mydog/" + user.id).then(function(data) {
+      if(data.length == 0){
+        $("#appointments").empty();
+        $("#appointments").html(`
+        <li class="collection-header">
+        <h4>
+          Upcoming Appointments
+        </h4>
+      </li>
+      <li class="collection-item" id="defaultMessage">
+        You have no upcoming appointments!
+      </li>`)
+      $("defaultMessage").show();
+      }
       if (data.length > 0) {
         $("#defaultMessage").hide();
         $("#appointments").empty();
@@ -154,13 +171,13 @@ $(document).ready(function() {
       let t3 = event.target.classList.value.includes("cnclBtn");
       if(t3){
         ans = event.target.id.slice(0,-2);
+        console.log("Appt ID to Cancel:")
         console.log(ans);
         $.ajax({
           url: "/api/cancel-walk/"+ans,
           method: "PUT"
         }).then(function(resp3){
           refreshAppt();
-          console.log(resp3);
           alert("canceled");
         }).catch(function(err){
           console.log(err);
@@ -170,44 +187,60 @@ $(document).ready(function() {
     });
 
   //retrieving current dog data and creating an li
-    function getDogData(){
-      $.get("/api/dog/" + user.id).then((results) => {
-        $("#petList").empty();  
-        results.forEach(function(res){
-          $("#petList").append(
-            `<li class='collection-item dogs' id="${res.id}">
-              <div class='row'>
-                <div class='col s9'>
-                  Dog Name: ${res.dogName}<br>Breed: ${res.breed}
-                </div>
-                <div class='col s3'>
-                  <a class='secondary-content btn-flat' id='deleteDog'>
-                    <i class='material-icons red-text delete-dog' id='trash'>delete_forever
-                    </i>
-                  </a>
-                </div>
+  function getDogData(){
+  $.get("/api/dog/" + user.id).then((results) => {
+      $("#petList").empty();  
+      results.forEach(function(res){
+        $("#petList").append(
+          `<li class="collection-item dogs" >
+            <div class="row">
+              <div class="col s9">
+                Dog Name: ${res.dogName}<br>Breed: ${res.breed}<br>Dog ID: ${res.id}
               </div>
-            </li>`
-          );
-        });
+              <div class="col s3">
+              <a class="secondary-content btn-flat">
+                <i class="material-icons red-text dogDelBtn" id="${res.id}dg">
+                  delete_forever
+                </i>
+              </a>
+            </div>
+          </div>
+        </li>`
+        );
       });
-    };
+    });
+  };
 
-    $("#addPet").on("click", function(){
-      getDogData();
-    });
-    
-    //delete dog information
-    $("#deleteDog").on("click", (event) => {
-      event.preventDefault();
-      console.log("this is the delete button");
-    if(event.target.matches("btn-flat") && event.target.classList.contains("dogs")){
-      const dogId = e.target.id
-      console.log(dogId)
-      $.delete("/api/dog/" + dogId)
-      getDogData();
-    }
-    });
+  //revised Delete dog
+  var whchDog = document.getElementById("petList"); 
+  whchDog.addEventListener("click", event =>{
+    let t4 = event.target.classList.value.includes("dogDelBtn");
+    if(t4){
+      ans = event.target.id.slice(0,-2);
+      console.log("Dog ID to Delete:")
+      console.log(ans);
+      $.ajax({
+        url: "/api/cancel-all/"+ ans,
+        method: "PUT"
+      }).then(function(resp3){
+        refreshAppt();
+      }).catch(function(err){
+        console.log(err);
+        alert("no such dog");
+      });
+      $.ajax({
+        method: "DELETE",
+        url: "/api/dog/" + ans,
+      }).then(function(resp5){
+        getDogData();
+        alert("Deleted & All Appts Canceled");
+      })
+    };
+  });
+
+  $("#addPet").on("click", function(){
+    getDogData();
+  });
 
     //add pet button to post new dog info to db
     $("#addPetBtn").on("click", function(event) {
@@ -224,7 +257,6 @@ $(document).ready(function() {
         DogActorId: user.id,
       };
 
-      console.log(newDog);
       $.post("/api/dog/", newDog).then(function(result) {        
       }).then(function(){
         dogName.val("");
@@ -233,9 +265,8 @@ $(document).ready(function() {
       })
     });
 
-      //autofills Member Profile
+    //autofills Member Profile
     $.get("/api/actor/" + user.id).then(results => {
-      console.log()
       $("#firstNam").html(results.firstName);
       $("#lastNam").html(results.lastName);
       $("#add1").html(results.address1);
@@ -245,7 +276,7 @@ $(document).ready(function() {
       $("#zip").html(results.zip5);
       $("#profEmail").html(results.email);
       $("#profPhone").html(results.phone);
-    })
+    });
   });
 });
 
