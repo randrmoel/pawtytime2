@@ -268,6 +268,24 @@ module.exports = function(app) {
       });
   });
 
+    //Cancel all appointments for dog
+    app.put("/api/cancel-all/:id", function(req,res){
+      // if cncl true, cancel the appointment by setting dogUser = 0
+         db.Appt.update({
+          dogUser: 0,
+          DogId: null
+        },
+        {
+          where:{
+            dogUser: req.params.id
+          }
+        }).then(function(dbCancelAll){
+          res.json(dbCancelAll);
+        }).catch(err => {
+          res.status(401).json(err)
+        });
+    });
+
      
 
   //Book an appointment
