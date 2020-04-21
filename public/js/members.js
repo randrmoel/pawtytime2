@@ -23,19 +23,39 @@ $(document).ready(function() {
       console.log(data);
       });
     };
-  
+    
     var apptLine;
    
   // Function to update appointment
   // list in modal prior to booking appointment
     const updateAppt = (response) =>{
+        var htmlResult2= ""
+        $.get("/api/dog/" + user.id)
+        .then((results) => {
+          //build select list from dogs
+          let htmlTmp ="";
+          let htmlDrpDwnBdy = "";
+          results.forEach(function(d){
+            htmlDrpDwnBdy = `<option value="${d.id}">${d.dogName}</option>`
+            htmlTmp += htmlDrpDwnBdy  
+          });
+          htmlResult2 = htmlTmp
+          console.log(htmlResult2);
+          newUpdate();
+        });
+
+    //This function is called by appointment controllers
+      const  newUpdate=()=>{
+      console.log("updating available appts");
       let idnt = 0;
       let tm = "00:00:00";
       let dt = "2020-01-01"
       let wM = "";
       let html1 = "";
       $('#apptList').empty();
-
+      dd = htmlResult2
+      console.log(dd);
+    
     for (i = 0; i < response.length; i++) {
       idnt = response[i].id;
       tm = response[i].timeSlot;
@@ -43,39 +63,43 @@ $(document).ready(function() {
       wM = response[i].walkMemo;
       dg = 0;
       apptLine = 
-      `<li>
-        <div class="row">
-
-            <div data-appt = ${idnt} class="col s2">
-              <a class="waves-effect waves-light btn-large apptBtn" id=${idnt}tb>
-                ${idnt}
-              </a>
-            </div> <!--end column 1-->
-            <div class="col s2 hour">
-              ${tm}
-            </div> <!--end column 2-->
-            <div class="col s2 date">
-              ${dt}
-            </div> <!-- end column 3 -->
-            <div class = "col m2 s2 dog">
-              <div class="input-container">
-                Dog ID: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">
-              </div>
-            </div> <!--end of column 4-->
-            <div class="col s12 input-display">
-              <div class="input-container">
-                <input id="${idnt}wm" type="text" placeholder="${wM}" class="walkMemo">
-                <!--<i class="material-icons">
-                  create
-                </i>-->
-              </div>
-            </div> <!--end column 5-->
-          </div> <!--End of Row -->
-        </li>`
+        `<li>
+          <div class="row">
+              <div data-appt = ${idnt} class="col s2">
+                <a class="waves-effect waves-light btn-large apptBtn" id=${idnt}tb>
+                  ${idnt}
+                </a>
+              </div> <!--end column 1-->
+              <div class="col s2 hour">
+                ${tm}
+              </div> <!--end column 2-->
+              <div class="col s2 date">
+                ${dt}
+              </div> <!-- end column 3 -->
+              <div class = "input-field col m3 s3">
+                <!--<div class="input-field">-->
+                <select id = "${idnt}dg">
+                  <option value="" disabled selected> pick </option>
+                  ${dd}
+                </select>
+                <label> Select Dog </label>
+                  <!--Dog ID: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">-->
+                <!--</div>-->
+              </div> <!--end of column 4-->
+              <div class="col s12 input-display">
+                <div class="input-container">
+                  <input id="${idnt}wm" type="text" placeholder="${wM}" class="walkMemo">
+                </div>
+              </div> <!--end column 5-->
+            </div> <!--End of Row -->
+          </li>`
       html1 = html1 + apptLine;
     } 
     $('#apptList').html(html1);
-  }
+    $('select').formSelect();
+  } //updateAppt Scope
+  } // scope of new function
+
 
   $.ajax({
     url: "/api/appt",
@@ -87,19 +111,20 @@ $(document).ready(function() {
       let t1 = event.target.classList.value.includes("apptBtn");
       //let t2 = event.target.classList.value.includes("inNum");
       if(t1 /*|| t2*/){
-        ans = event.target.id.slice(0,-2);
+        ans = event.target.id.slice(0,-2); //appointment ID
+        console.log(ans);
         dogTg = "#"+ ans + "dg"
         wmTg = "#" + ans + "wm"
         console.log(ans);
-        console.log($(dogTg).val());
+        console.log($(dogTg).children(1).val());
         console.log($(wmTg).val());
         putAppt(ans, $(dogTg).val(), $(wmTg).val());
         $.ajax({
           url: "/api/appt",
           method: "GET"
         }).then(function(resp2){
-          updateAppt(resp2);
           $("#scheduleModal").modal("close");
+          updateAppt(resp2);
           refreshAppt();
         });
       };
@@ -178,11 +203,15 @@ $(document).ready(function() {
           method: "PUT"
         }).then(function(resp3){
           refreshAppt();
-          alert("canceled");
+          $.ajax({
+            url: "/api/appt",
+            method: "GET"
+          }).then(function(resp1){
+            updateAppt(resp1);});
         }).catch(function(err){
           console.log(err);
           alert("no such appointment");
-        })
+        });
       }
     });
 
@@ -277,7 +306,7 @@ $(document).ready(function() {
       $("#profEmail").html(results.email);
       $("#profPhone").html(results.phone);
     });
-  });
+  }); // End of User Scope -- /api/user_data
 });
 
 
