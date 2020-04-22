@@ -26,7 +26,6 @@
       </symbol>
     </svg>
   
-  
     <div class="ajax-loader">
       <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
       <div class="paw"><svg class="icon"><use xlink:href="#paw" /></svg></div>
@@ -39,32 +38,53 @@
   <div class="container vov fade-in t-3">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
-        <h2><i class="fas fa-paw amber-text"></i> Hello <span id="UserName"></span></h2>
-      </div>
-    </div>
+        <h2>
+          <i class="fas fa-paw amber-text"></i> Hello <span id="UserName"></span>
+        </h2>
+      </div> <!--end of column-->
+    </div> <!--end of row-->
   </div>
 
 <div class="container">
-
-<div class="row vov fade-in t-3">
-<div class="col m6 s12">
-  <div class="row">
-  <!-- button 1 -->
-    
-    <div class="col s4 "><a id="scheduler" href="#scheduleModal" class="btn-floating btn-large waves-effect waves-light red floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Schedule a Walk"><i id="icon" class="large material-icons">event</i></a></div>
-    <label for=""></label>
-<!-- button 2 -->
-    <div class="col s4 "><a id="profile" href="#modalProfile" class="btn-floating btn-large waves-effect waves-light amber floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Profile"><i id="icon" class="large material-icons">person</i></a></div>
-</div>
-  
-<!-- button 3 -->
-<div class="row">
-    <div class="col s4 "><a id="addPet" href="#modalAddPet" class="btn-floating btn-large waves-effect waves-light green floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Add a Pet"><i id="icon" class="large fas fa-dog"></i></a></div>
-<!-- button 4 -->
-
-    <div class="col s4 " ><a id="floatingBtn" class="btn-floating btn-large waves-effect waves-light black floatingBtn tooltipped" data-position="bottom" data-tooltip="Become a Dog Walker"><i id="icon" class="large material-icons">directions_walk</i></a></div>
-</div>
-</div>
+  <div class="row vov fade-in t-3">
+    <div class="col m6 s12">
+      <div class="row">
+        <!-- button 1 -->
+        <div class="col s4 ">
+          <a id="scheduler" href="#scheduleModal" class="btn-floating btn-large waves-effect waves-light red floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Schedule a Walk">
+            <i id="icon" class="large material-icons">
+              event
+            </i>
+          </a>
+        </div> <!--end of column-->
+        <label for=""></label>
+        <!-- button 2 -->
+        <div class="col s4 ">
+          <a id="profile" href="#modalProfile" class="btn-floating btn-large waves-effect waves-light amber floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Profile">
+            <i id="icon" class="large material-icons">
+              person
+            </i>
+          </a>
+        </div> <!--end of column-->
+      </div> <!--end of row -->
+      <!-- button 3 -->
+      <div class="row">
+        <div class="col s4 ">
+          <a id="addPet" href="#modalAddPet" class="btn-floating btn-large waves-effect waves-light green floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Add a Pet">
+            <i id="icon" class="large fas fa-dog">
+            </i>
+          </a>
+        </div> <!--end of column-->
+        <!-- button 4 -->
+        <div class="col s4 " >
+          <a id="floatingBtn" href="#modalAddDelSlot" class="btn-floating btn-large waves-effect waves-light black floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Walker Management">
+            <i id="icon" class="large material-icons">
+              assignment
+            </i>
+          </a>
+        </div> <!--end of column-->
+      </div> <!--end of row-->
+    </div>
 <div class="col m6 s12 pull-s2">
   <!-- upcomming appointments -->
   <ul class="collection with-header" id="appointments">
@@ -145,6 +165,45 @@
     </ul>
   </div>
 </div>
+
+<!--add appointment slots by walker-->
+<div id = "modalAddDelSlot" class="modal">
+  <div class = "modal-content">
+    <h4>Manage Appointment Slots</h4>
+    <p>Create Your Walk Availability</p>
+    <div class="row">
+      <div class="col">
+        <img src="" alt="">
+      </div>
+    </div>
+    <div class="row" id="slotForm">
+      <div class="input-field col s4">
+        <input placeholder="09:00:00" id="time-slot" type="text">
+        <label for="time-slot">24-hour time</label>
+      </div>
+      <div class="input-field col s4">
+        <input placeholder="2010-01-01" id="date-slot" type="text">
+        <label for="date-slot">Date (YYYY-MM-DD)</label>
+      </div>
+      <div class="col s12 m4 pull-s1">
+      <button class="btn btn-default amber right" id="addSlotBtn">
+        Add Time Slot
+        <i class="material-icons right">send</i>
+      </button>
+      </div>
+    </div>
+    <div class="row" >
+      <ul class="collection" id="slotList">
+       <!-- all of the time slots will be here -->
+      </ul>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">close</a>
+  </div>
+</div>
+
+
 
 <!-- floating action button -->
   <div class="fixed-action-btn toolbar">

@@ -25,7 +25,107 @@ $(document).ready(function() {
     };
     
     var apptLine;
-   
+    const updateSlotList = () =>{
+      $("#slotList").empty();
+      $.get("/api/unbooked_appt/"+user.id)
+      .then(res=>{
+        res.forEach(function(ele){
+          $("#slotList").append(
+            `<li class="collection-item slots" >
+              <div class="row">
+                <div class="col s9">
+                  Time: ${ele.timeSlot}  Date: ${ele.walkDate}
+                </div>
+                <div class="col s3">
+                <a class="secondary-content btn-flat">
+                  <i class="material-icons red-text slotDelBtn" id="${ele.id}sl">
+                    delete_forever
+                  </i>
+                </a>
+              </div>
+            </div>
+          </li>`
+          );
+        });
+      })
+    }
+    updateSlotList();
+    var addSlot = document.getElementById("slotForm");
+    addSlot.addEventListener("click", event =>{
+      event.preventDefault();
+      const t5 = event.target.id.includes("addSlotBtn")
+      if(t5){
+        console.log(event);
+        timeStr = $("#time-slot").val().trim();
+        dateStr = $("#date-slot").val().trim();
+        timePat = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/
+        datePat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
+        timeTst = timePat.test(timeStr);
+        dateTst = datePat.test(dateStr);
+        if(!timeTst || !dateTst){
+          console.log("Bad Date and time");
+          alert("Bad Date or Time format");
+        }else {
+          $("#time-slot").empty();
+          $("#date-slot").empty();
+          console.log(timeStr);
+          console.log(dateStr);
+          console.log(user.id);
+          console.log(user.actorType);
+          newSlot ={
+            walkDate: dateStr,
+            timeSlot: timeStr, 
+            DogActorId: user.id
+          }
+          console.log("Save New Slot");
+          console.log(newSlot);
+          $.post("/api/appt/", newSlot).then(()=>{
+            updateSlotList();
+            $.ajax({
+              method: "GET",
+              url: "/api/appt"
+            }).then(resp12=>{
+              console.log("resp12")
+              console.log(resp12);
+              console.log("refreshing owner list after add slot")
+              updateAppt(resp12)
+            });
+          });
+        }
+      };
+    });
+
+    //delete slot event listener
+    var whchSltDel = document.getElementById("slotList");
+    let ans; 
+    whchSltDel.addEventListener("click", event =>{
+      console.log(event);
+      let t6 = event.target.classList.value.includes("slotDelBtn");
+      if(t6){
+        ans = event.target.id.slice(0,-2);
+        console.log(ans)
+        $.ajax({
+          method: "DELETE",
+          url: "/api/appt/" + ans,
+        })
+        .then((res)=>{
+          console.log(res);
+          updateSlotList();
+
+          $.ajax({
+            method: "GET",
+            url: "/api/appt"
+          }).then(resp11=>{
+            console.log("resp11")
+            console.log(resp11);
+            console.log("refreshing owner list after del slot")
+            updateAppt(resp11)
+          });
+        });
+      };
+    });
+
+
   // Function to update appointment
   // list in modal prior to booking appointment
     const updateAppt = (response) =>{
@@ -44,7 +144,7 @@ $(document).ready(function() {
           newUpdate();
         });
 
-    //This function is called by appointment controllers
+    //This function is called by owners to update appts
       const  newUpdate=()=>{
       console.log("updating available appts");
       let idnt = 0;
@@ -262,7 +362,7 @@ $(document).ready(function() {
         url: "/api/dog/" + ans,
       }).then(function(resp5){
         getDogData();
-        alert("Deleted & All Appts Canceled");
+        console.log(resp5);
       })
     };
   });
@@ -286,8 +386,7 @@ $(document).ready(function() {
         DogActorId: user.id,
       };
 
-      $.post("/api/dog/", newDog).then(function(result) {        
-      }).then(function(){
+      $.post("/api/dog/", newDog).then(function(){
         dogName.val("");
         breed.val("");
         getDogData();
