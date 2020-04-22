@@ -224,6 +224,7 @@ $(document).ready(function() {
           method: "GET"
         }).then(function(resp2){
           $("#scheduleModal").modal("close");
+          updateSlotList()
           updateAppt(resp2);
           refreshAppt();
         });
@@ -302,6 +303,8 @@ $(document).ready(function() {
           url: "/api/cancel-walk/"+ans,
           method: "PUT"
         }).then(function(resp3){
+          console.log(resp3);
+          updateSlotList();
           refreshAppt();
           $.ajax({
             url: "/api/appt",
