@@ -1,6 +1,7 @@
 $(document).ready(function() {
   // This file just does a GET request to figure out which user is logged in
   // and updates the HTML on the page
+  // turn modals on and off depending on actorType
 
   $(".modal").modal();
   $(".tooltipped").tooltip();
@@ -9,6 +10,85 @@ $(document).ready(function() {
   // First get the current user and wrap this around
   // all other functions
   $.get("/api/user_data").then(function(user){
+    if(user.actorType){
+      console.log("I'm an owner:" + user.id);
+      $("#scheduler, #addPet").addClass("modal-trigger");
+      $("#scheduler, #addPet").show();
+      $("#floatingBtn").removeClass("modal-trigger");
+      $("#floatingBtn").hide();
+      $("#appointments").show();
+      $("#walkerBooked").hide();
+    } else {
+      console.log("I'm an walker" + user.id);
+      $("#scheduler, #addPet").removeClass("modal-trigger");
+      $("#scheduler, #addPet").hide();
+      $("#floatingBtn").addClass("modal-trigger");
+      $("#floatingBtn").show();
+      $("#appointments").hide();
+      $("#walkerBooked").show();
+    }
+     $.get("/api/booked_appt/"+ user.id)
+    .then(res=>{
+      console.log(res);
+      let html3 = ""
+      $("#walkerBooked").empty()
+      if(res.length !== 0){
+        const line1 = `
+      <li class="collection-header">
+        <h4>
+          Upcoming Bookings
+        </h4>
+      </li>
+      <li class = "collection-item">
+        <div class="row">
+          <div class="col m3 s3 ">
+            Dog Name
+          </div> <!-- end column 1 -->
+          <div class="col m3 s2  ">
+            Time
+          </div> <!--end column 2-->
+          <div class="col m5 s2  ">
+            Date
+          </div> <!-- end column 3 -->
+          <div class="col m5 s4 ">
+            Memo
+          </div> <!-- end column 4 -->
+        </li>`
+        html3 = line1
+        res.forEach(ele=>{
+          let apptLine2 = 
+          `<li class ="collection-item">
+            <div class="row">
+              <div class="col m3 s3">
+                ${ele.dogName}
+              </div> <!-- end column 1 -->
+              <div class="col m3 s2 ">
+                ${ele.Appts[0].timeSlot}
+              </div> <!--end column 2-->
+              <div class="col m5 s4 ">
+                ${ele.Appts[0].walkDate}
+              </div> <!-- end column 3 -->
+              <div class="col m5 s4 ">
+                ${ele.Appts[0].walkMemo}
+              </div> <!-- end column 4 -->
+            </li>`
+          html3 = html3 + apptLine2
+        });
+      } else {
+        const line_n = `
+              <li class="collection-header">
+                <h4>
+                  Upcoming Bookings
+                </h4>
+              </li>
+              <li class="collection-item" id="defaultMessage2">
+                You have no upcoming bookings!
+              </li>`
+          html3 = line_n
+      }
+      $("#walkerBooked").html(html3);
+    });
+
     const putAppt = (apptId, dog, wM) => {
       console.log("apptId:"+ apptId, "Dog Id" + dog, "Memo: "+ wM);
       $.ajax({
@@ -177,14 +257,11 @@ $(document).ready(function() {
                 ${dt}
               </div> <!-- end column 3 -->
               <div class = "input-field col m3 s3">
-                <!--<div class="input-field">-->
                 <select id = "${idnt}dg">
                   <option value="" disabled selected> pick </option>
                   ${dd}
                 </select>
                 <label> Select Dog </label>
-                  <!--Dog ID: <input id = "${idnt}dg" type="text" placeholder="${dg}" class="whchDog">-->
-                <!--</div>-->
               </div> <!--end of column 4-->
               <div class="col s12 input-display">
                 <div class="input-container">
@@ -238,7 +315,7 @@ $(document).ready(function() {
     $("#UserName").text(data.firstName);
   });
 
-  //function to get any active upcoming appointments
+  //function to get any active upcoming owner appointments
   
   const refreshAppt = () =>{
     $("#defaultMessage").show();
@@ -254,7 +331,6 @@ $(document).ready(function() {
       <li class="collection-item" id="defaultMessage">
         You have no upcoming appointments!
       </li>`)
-      $("defaultMessage").show();
       }
       if (data.length > 0) {
         $("#defaultMessage").hide();

@@ -194,8 +194,6 @@ module.exports = function(app) {
       });
   });
 
-
-
 // get booked appointments for dog walker
 // by dogName and date
    app.get("/api/booked_appt/:DogActorId", function(req, res){  

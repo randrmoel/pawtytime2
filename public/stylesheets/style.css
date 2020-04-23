@@ -75,6 +75,7 @@ body {
 }
 
 #appointments,
+#walkerBooked,
 #scheduleModal,
 #modalProfile,
 #modalAddPet,
@@ -161,7 +162,10 @@ transition: .4s all;
   margin-bottom: 40px;
   }
 
-#icon {
+#icon1,
+#icon2,
+#icon3,
+#icon4 {
   margin-top: 10px;
   font-size: 60px;
 }
