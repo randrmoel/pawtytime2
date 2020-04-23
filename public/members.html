@@ -52,7 +52,7 @@
         <!-- button 1 -->
         <div class="col s4 ">
           <a id="scheduler" href="#scheduleModal" class="btn-floating btn-large waves-effect waves-light red floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Schedule a Walk">
-            <i id="icon" class="large material-icons">
+            <i id="icon1" class="large material-icons">
               event
             </i>
           </a>
@@ -61,7 +61,7 @@
         <!-- button 2 -->
         <div class="col s4 ">
           <a id="profile" href="#modalProfile" class="btn-floating btn-large waves-effect waves-light amber floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Profile">
-            <i id="icon" class="large material-icons">
+            <i id="icon2" class="large material-icons">
               person
             </i>
           </a>
@@ -71,22 +71,22 @@
       <div class="row">
         <div class="col s4 ">
           <a id="addPet" href="#modalAddPet" class="btn-floating btn-large waves-effect waves-light green floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Add a Pet">
-            <i id="icon" class="large fas fa-dog">
+            <i id="icon3" class="large fas fa-dog">
             </i>
           </a>
         </div> <!--end of column-->
         <!-- button 4 -->
         <div class="col s4 " >
           <a id="floatingBtn" href="#modalAddDelSlot" class="btn-floating btn-large waves-effect waves-light black floatingBtn tooltipped modal-trigger" data-position="bottom" data-tooltip="Walker Management">
-            <i id="icon" class="large material-icons">
+            <i id="icon4" class="large material-icons">
               assignment
             </i>
           </a>
         </div> <!--end of column-->
       </div> <!--end of row-->
     </div>
-<div class="col m6 s12 pull-s2">
-  <!-- upcomming appointments -->
+<div class="col m6 s4 pull-s2">
+  <!-- upcoming appointments for owners-->
   <ul class="collection with-header" id="appointments">
     <li class="collection-header">
       <h4>
@@ -95,6 +95,17 @@
     </li>
     <li class="collection-item" id="defaultMessage">
       You have no upcoming appointments!
+    </li>
+  </ul>
+    <!-- upcoming bookings for walkers-->
+  <ul class="collection with-header" id="walkerBooked">
+    <li class="collection-header">
+      <h4>
+        Upcoming Bookings
+      </h4>
+    </li>
+    <li class="collection-item" id="defaultMessage2">
+      You have no upcoming bookings!
     </li>
   </ul>
 </div>
