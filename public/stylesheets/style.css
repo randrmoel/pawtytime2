@@ -80,9 +80,10 @@ body {
 #modalProfile,
 #modalAddPet,
 #modalAddDelSlot,
+#modalEraseUser,
 #modal3,
 #modal2,
- #modal1{
+#modal1{
    font-family: 'Fjalla One', sans-serif;
  }
 
@@ -155,7 +156,8 @@ transition: .4s all;
 #profile,
 #addPet,
 #scheduler,
-#floatingBtn {
+#floatingBtn,
+#delUser {
   border-radius: 10px;
   height: 80px;
   width: 80px;
@@ -165,7 +167,8 @@ transition: .4s all;
 #icon1,
 #icon2,
 #icon3,
-#icon4 {
+#icon4,
+#icon5 {
   margin-top: 10px;
   font-size: 60px;
 }
